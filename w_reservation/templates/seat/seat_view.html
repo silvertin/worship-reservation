@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container my-3">
+    {% for message in get_flashed_messages() %}
+    <div class="alert alert-danger" role="alert">
+        {{ message }}
+    </div>
+    {% endfor %}
+    <h2 class="border-bottom py-2">{{ worship.date }} {{ worship.part }}</h2>
+    <div class="row my-3">
+        <div class="card-body">
+            <div class="card-text">
+                {% for s in worship.seat_set %}
+                    {% if s.status == 0 %}
+                        <a href="#" class="badge badge-primary" name="seat-badge" style="width:50px">{{ s.location }}</a>
+                    {% elif s.status == 1 %}
+                        <a href="#" class="badge badge-warning" style="width:50px">{% if g.user.admin == 2 %}{{ s.user.username }}{% else %}X{% endif %}</a>
+                    {% else %}
+                        <a href="#" class="badge badge-secondary" style="width:50px"></a>
+                    {% endif %}
+                    {% if loop.index is divisibleby(15) %}
+                    <br>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <a href="#" class="badge badge-success">현재 선택</a>
+            <a href="#" class="badge badge-primary">예약 가능</a>
+            <a href="#" class="badge badge-warning">예약 완료</a>
+            <a href="#" class="badge badge-secondary">예약 불가</a>
+        </div>
+    </div>
+    <form method="post" class="post-form my-3">
+        {{ form.csrf_token }}
+        <!-- 오류표시 Start -->
+        {% for field, errors in form.errors.items() %}
+        <div class="alert alert-danger" role="alert">
+            <strong>{{ form[field].label }}</strong>: {{ ', '.join(errors) }}
+        </div>
+        {% endfor %}
+        <!-- 오류표시 End -->
+        <div class="form-group">
+            <label for="seat">좌석</label>
+            <input type="text" class="form-control" name="seat" id="seat" value="{{ form.seat.data or '' }}">
+        </div>
+        <button type="submit" class="btn btn-primary">등록하기</button>
+    </form>
+</div>
+{% endblock %}
+{% block script %}
+<script type="text/javascript">
+
+$("a[name=seat-badge]").on('click',function(){
+    $("input[name=seat]").val($(this).html());
+});
+</script>
+{% endblock %}
