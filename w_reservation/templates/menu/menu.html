@@ -2,23 +2,17 @@
 {% block content %}
 <div class="container my-3">
     <div class="form-group">
-        <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        예배 선택
-        </a>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-          {% for menu in menus %}
-          <a class="dropdown-item" href="{{ menu.href }}">{{ menu.name }}</a>
-          {% endfor %}
+        <div class="button-menu">
+            {% if not menus %}
+                <div class="alert alert-danger" role="alert">
+                    등록된 예배가 없습니다.
+                </div>
+            {% else %}
+            {% for menu in menus %}
+                <button type="button" class="btn btn-primary btn-lg" onclick="location.href='{{ menu.href }}'">{{ menu.name }}</button>
+            {% endfor %}
+            {% endif %}
         </div>
     </div>
 </div>
-{% endblock %}
-{% block script %}
-<script type="text/javascript">
-$(document).ready(function(){
-    $(".dropdown-item").on('click',function() {
-        $(".dropdown-toggle").html($(this).text())
-    });
-});
-</script>
 {% endblock %}

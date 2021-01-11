@@ -42,7 +42,7 @@ def login():
         if error is None:
             session.clear()
             session['user_id'] = user.id
-            return redirect(url_for('menu.mainmenu'))
+            return redirect(url_for('worship._list'))
         flash(error)
     return render_template('auth/login.html', form=form)
 

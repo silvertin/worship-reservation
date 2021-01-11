@@ -1,56 +1,57 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container my-3">
-    {% for message in get_flashed_messages() %}
-    <div class="alert alert-danger" role="alert">
-        {{ message }}
-    </div>
-    {% endfor %}
-    <h2 class="border-bottom py-2">{{ worship.date }} {{ worship.part }}</h2>
+    <h2 class="border-bottom py-2">{{ worship.date|datetime }} {{ worship.part }}</h2>
     <div class="row my-3">
         <div class="card-body">
             <div class="card-text">
-                {% for s in worship.seat_set %}
-                    {% if s.status == 0 %}
-                        <a href="#" class="badge badge-primary" name="seat-badge" style="width:50px">{{ s.location }}</a>
-                    {% elif s.status == 1 %}
-                        <a href="#" class="badge badge-warning" style="width:50px">{% if g.user.admin == 2 %}{{ s.user.username }}{% else %}X{% endif %}</a>
-                    {% else %}
-                        <a href="#" class="badge badge-secondary" style="width:50px"></a>
-                    {% endif %}
-                    {% if loop.index is divisibleby(15) %}
-                    <br>
-                    {% endif %}
-                {% endfor %}
+                <div class="worship_info">
+                    <p class="h5"></p>
+                </div>
+                <div class="users px-2 mt-0">
+                    <p class="h5">예약자 명단 ({{ worship.curnum }}명 / {{ worship.limit }}명)</p>
+                    {% for s in worship.seat_set %}
+                        {% if s.status == 1 %}
+                            {% if g.user %}
+                            <button class="btn btn-primary del" data-uri="{{ url_for('seat.delete', seat_id=s.id) }}">{{ s.user }}</button>
+                            {% else %}
+                            <button class="btn btn-primary">{{ s.user }}</button>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                </div>
             </div>
-            <a href="#" class="badge badge-success">현재 선택</a>
-            <a href="#" class="badge badge-primary">예약 가능</a>
-            <a href="#" class="badge badge-warning">예약 완료</a>
-            <a href="#" class="badge badge-secondary">예약 불가</a>
         </div>
     </div>
     <form method="post" class="post-form my-3">
         {{ form.csrf_token }}
         <!-- 오류표시 Start -->
-        {% for field, errors in form.errors.items() %}
-        <div class="alert alert-danger" role="alert">
-            <strong>{{ form[field].label }}</strong>: {{ ', '.join(errors) }}
-        </div>
-        {% endfor %}
+        {% include "form_errors.html" %}
         <!-- 오류표시 End -->
+        {% if worship.curnum < worship.limit %}
         <div class="form-group">
-            <label for="seat">좌석</label>
-            <input type="text" class="form-control" name="seat" id="seat" value="{{ form.seat.data or '' }}">
+            <label for="name">이름</label>
+            <input type="text" class="form-control" name="name" id="name" value="{{ form.name.data or '' }}">
         </div>
         <button type="submit" class="btn btn-primary">등록하기</button>
+        {% else %}
+        <div class="alert alert-danger" role="alert">
+            예약이 가득 찼습니다.
+        </div>
+        {% endif %}
     </form>
 </div>
 {% endblock %}
 {% block script %}
+{% if g.user %}
 <script type="text/javascript">
-
-$("a[name=seat-badge]").on('click',function(){
-    $("input[name=seat]").val($(this).html());
+$(document).ready(function(){
+    $(".del").on('click',function() {
+        if(confirm("정말로 예약을 삭제하시겠습니까?")) {
+            location.href = $(this).data('uri')
+        }
+    });
 });
 </script>
+{% endif %}
 {% endblock %}

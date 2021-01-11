@@ -22,6 +22,10 @@ class AddWorshipForm(FlaskForm):
 
 
 class RegisterSeatForm(FlaskForm):
-    seat = StringField('좌석', validators=[DataRequired('좌석을 선택해주십시오')])
+    # seat = StringField('좌석', validators=[DataRequired('좌석을 선택해주십시오.')])
+    name = StringField('이름', validators=[DataRequired('이름을 적어주십시오.')])
 
+
+class ConnectForm(FlaskForm):
+    code = PasswordField('접속코드', validators=[DataRequired('접속코드4자리를 적어주세요.')])
 
