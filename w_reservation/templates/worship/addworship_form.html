@@ -17,7 +17,8 @@
             {{ form.date(class="dtpick") }} -->
             <input type="text" class="form-control datetimepicker-input" data-target="#datetimepicker1" name="date" id="date" value="{{ form.date.data or '' }}">
             <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                <div class="input-group-text"><i class="fa fa-calendar"></i>
+                <div class="input-group-text">
+                    <i class="fa fa-calendar"></i>
                 </div>
             </div>
         </div>
@@ -28,6 +29,14 @@
         <div class="form-group">
             <label for="limit">참석자 Limit</label>
             <input type="number" class="form-control" name="limit" id="limit" min="10" max="500" value="{{ form.limit.data or '' }}">
+        </div>
+        <div class="form-group">
+            <label for="worshiptype">예배 타입</label>
+            <select class="form-control" name="worshiptype" id="worshiptype" value="{{ form.worshiptype.data or '' }}">
+                {% for worshiptype in worshiptype_list %}
+                <option value="{{ worshiptype.id }}">{{ worshiptype.detail }}</option>
+                {% endfor %}
+            </select>
         </div>
         <button type="submit" class="btn btn-primary">저장하기</button>
     </form>

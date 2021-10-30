@@ -18,7 +18,7 @@
             <td><input type="checkbox" name="checkboxName" data-uri="{{ url_for('worship.delete',worship_id = worship.id) }}"></td>
             <td>{{ worship_list.total - ((worship_list.page-1) * worship_list.per_page) - loop.index0 }}</td>
             <td>{{ worship.date|datetime }}</td>
-            <td><a href="{{ url_for('seat._list',worship_id=worship.id) }}">{{ worship.part }}</a></td>
+            <td style="background: {{ worship.worshiptype.bgcolor }}"><a href="{{ url_for('seat._list',worship_id=worship.id) }}">{{ worship.part }} ({{ worship.worshiptype.detail }})</a></td>
             <td>{{ worship.curnum }} / {{ worship.limit }}</td>
         </tr>
         {% endfor %}

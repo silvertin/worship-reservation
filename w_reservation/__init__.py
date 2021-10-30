@@ -35,12 +35,13 @@ def create_app():
     from . import models
 
     # blueprint
-    from .views import main_views, auth_views, menu_views, worship_views, seat_views
+    from .views import main_views, auth_views, menu_views, worship_views, seat_views, worshiptype_views
     app.register_blueprint(main_views.bp)
     app.register_blueprint(auth_views.bp)
     app.register_blueprint(menu_views.bp)
     app.register_blueprint(worship_views.bp)
     app.register_blueprint(seat_views.bp)
+    app.register_blueprint(worshiptype_views.bp)
 
 
     # filter

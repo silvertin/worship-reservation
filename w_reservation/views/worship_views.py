@@ -4,7 +4,7 @@ from datetime import date
 
 from .. import db
 from .auth_views import login_required
-from ..models import Worship, Seat
+from ..models import Worship, Seat, WorshipType
 from ..forms import AddWorshipForm
 
 bp = Blueprint('worship', __name__, url_prefix='/worship')
@@ -23,10 +23,12 @@ def _list():
 @login_required
 def add():
     form = AddWorshipForm()
+    worshiptype_list = WorshipType.query.order_by(WorshipType.id.desc())
     if request.method == 'POST' and form.validate_on_submit():
         worship = Worship(date=form.date.data,
                           part=form.part.data,
                           limit=form.limit.data,
+                          worshiptype=form.worshiptype.data,
                           curnum='0')
         db.session.add(worship)
         for i in range(form.limit.data):
@@ -34,7 +36,7 @@ def add():
             worship.seat_set.append(seat)
         db.session.commit()
         return redirect(url_for('worship._list'))
-    return render_template('worship/addworship_form.html', form=form)
+    return render_template('worship/addworship_form.html', form=form, worshiptype_list=worshiptype_list)
 
 
 @bp.route('/delete/<int:worship_id>')

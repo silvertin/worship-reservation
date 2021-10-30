@@ -8,12 +8,20 @@ class User(db.Model):
     admin = db.Column(db.Integer, nullable=True, server_default='2')
 
 
+class WorshipType(db.Model):
+    __tablename__ = 'worshiptype'
+    id = db.Column(db.Integer, primary_key=True)
+    detail = db.Column(db.String(100), nullable=True)
+    bgcolor = db.Column(db.String(7), default='#FFFFFF')
+
 class Worship(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     date = db.Column(db.Date(), nullable=False)
     part = db.Column(db.String(100), nullable=False)
     limit = db.Column(db.Integer, nullable=False)
     curnum = db.Column(db.Integer, nullable=False)
+    worshiptype_id = db.Column(db.Integer, db.ForeignKey('worshiptype.id',ondelete='CASCADE'))
+    worshiptype = db.relationship('WorshipType', backref=db.backref('worship_set', cascade='all, delete-orphan'))
 
 
 class Seat(db.Model):
