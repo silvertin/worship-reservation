@@ -14,7 +14,7 @@ bp = Blueprint('worship', __name__, url_prefix='/worship')
 @login_required
 def _list():
     page = request.args.get('page', type=int, default=1)
-    worship_list = Worship.query.order_by(Worship.date.desc())
+    worship_list = Worship.query.order_by(Worship.part.asc())
     worship_list = worship_list.paginate(page, per_page=10)
     return render_template('worship/worship_list.html', worship_list=worship_list)
 

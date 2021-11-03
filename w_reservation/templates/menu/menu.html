@@ -9,7 +9,9 @@
                 </div>
             {% else %}
             {% for menu in menus %}
-                <button type="button" class="btn btn-primary btn-lg" onclick="location.href='{{ menu.href }}'">{{ menu.name }}</button>
+            <div class="my-3">
+                <button type="button" class="btn btn-primary btn-lg" onclick="location.href='{{ menu.href }}'" style="background-color: {{ menu.bgcolor }}; color: #000000; border-color: #000000;">{{ menu.name }}</button>
+            </div>
             {% endfor %}
             {% endif %}
         </div>

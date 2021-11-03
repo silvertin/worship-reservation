@@ -1,0 +1,4 @@
+export FLASK_APP=w_reservation;
+export FLASK_ENV=dev;
+export APP_CONFIG_FILE=../config/development.py
+gunicorn --bind=0.0.0.0 --workers=2 "w_reservation:create_app()"
