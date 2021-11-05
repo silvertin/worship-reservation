@@ -31,6 +31,20 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/w_reservation/templates/seat/seat_view.html">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
+        <entry key="/w_reservation/templates/worship/worship_list.html">
+          <value>
+            <Attribute>
+              <option name="separator" value=";" />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/w_reservation/views/auth_views.py">
           <value>
             <Attribute>
