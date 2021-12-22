@@ -10,7 +10,7 @@ bp = Blueprint('menu', __name__, url_prefix='/menu')
 
 @bp.route('/mainmenu/')
 def mainmenu():
-    worship_list = Worship.query.filter(Worship.date >= date.today()).filter(Worship.date <= date.today() + timedelta(days=7)).order_by(Worship.part.asc())
+    worship_list = Worship.query.filter(Worship.date >= date.today()).filter(Worship.date <= date.today() + timedelta(days=7)).order_by(Worship.id.desc())
     menu = []
     for worship in worship_list:
         menu.append({'name': worship.date.strftime('%Y년%m월%d일')+'_'+str(worship.part), 'href': url_for('seat._list',worship_id=worship.id), 'bgcolor': worship.worshiptype.bgcolor })

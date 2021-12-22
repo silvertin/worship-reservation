@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container my-3">
-    <table class="table">
+    <table class="table" id="w-table">
         <thead>
         <tr class="text-center thead-dark">
             <th>선택</th>
@@ -13,10 +13,10 @@
         </thead>
         <tbody>
         {% if worship_list %}
-        {% for worship in worship_list.items %}
-        <tr class="text-center">
+        {% for worship in worship_list %}
+        <tr class="text-center" id="{{ worship.id }}">
             <td><input type="checkbox" name="checkboxName" data-uri="{{ url_for('worship.delete',worship_id = worship.id) }}"></td>
-            <td>{{ worship_list.total - ((worship_list.page-1) * worship_list.per_page) - loop.index0 }}</td>
+            <td>{{ worship.id}}</td>
             <td>{{ worship.date|datetime }}</td>
             <td style="background: {{ worship.worshiptype.bgcolor }}"><a href="{{ url_for('seat._list',worship_id=worship.id) }}">{{ worship.part }}</a></td>
             <td>{{ worship.curnum }} / {{ worship.limit }}</td>
@@ -29,46 +29,6 @@
         {% endif %}
         </tbody>
     </table>
-    <ul class="pagination justify-content-center">
-        <!-- 이전 페이지 -->
-        {% if worship_list.has_prev %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ worship_list.prev_num }}">이전</a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">이전</a>
-        </li>
-        {% endif %}
-        {% for page_num in worship_list.iter_pages() %}
-            {% if page_num %}
-                {% if page_num != worship_list.page %}
-                <li class="page-item">
-                    <a class="page-link" href="?page={{ page_num }}">{{ page_num }}</a>
-                </li>
-                {% else %}
-                <li class="page-item active" aria-current="page">
-                    <a class="page-link" href="#">{{ page_num }}</a>
-                </li>
-                {% endif %}
-            {% else %}
-                <li class="disabled">
-                    <a class="page-link" href="#">...</a>
-                </li>
-            {% endif %}
-        {% endfor %}
-        <!-- 다음 페이지 -->
-        {%if worship_list.has_next %}
-        <li class="page-item">
-            <a class="page-link" href="?page={{ worship_list.next_num }}">다음</a>
-        </li>
-        {% else %}
-        <li class="page-item disabled">
-            <a class="page-link" tabindex="-1" aria-disabled="true" href="#">다음</a>
-        </li>
-        {% endif %}
-    </ul>
-    <!-- 페이징 처리 끝 -->
     <a href="{{ url_for('worship.add') }}" class="btn btn-primary">예배 추가</a>
     <a href="#" class="delete btn btn-primary">예배 삭제</a>
 </div>
@@ -88,5 +48,39 @@ $(document).ready(function(){
 $("input[name=checkboxName]").on('change',function(){
     $("input[name=checkboxName]").not(this).prop('checked',false);
 });
+
+$("#w-table").tableDnD();
+
+$(function(){
+    $("#w-table").tableDnD({
+    onDragClass: "dragRow",
+    onDrop : function(table, row) {
+
+        var rows = table.tBodies[0].rows;
+        var rows_list = [];
+
+        for (var i=0; i < rows.length; i++)
+        {
+            rows_list.push(rows[i].id);
+        }
+        console.log()
+
+        $.ajax({
+        type: 'post',
+        url: '/worship/changeid/',
+        data: JSON.stringify({rows:rows_list}),
+        dataType : "json",
+        success: function(data, textStatus, jqXHR)
+        {
+            window.location.href = '/worship/list/';
+        },
+        error: function (jqXHR, textStatus, errorThrown)
+        {
+            window.location.href = '/worship/list/';
+        }
+        });
+    }
+    });
+})
 </script>
 {% endblock %}

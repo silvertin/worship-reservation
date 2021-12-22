@@ -1,3 +1,5 @@
+import json
+
 from flask import Blueprint, url_for, g, render_template, request, flash
 from werkzeug.utils import redirect
 from datetime import date
@@ -13,9 +15,9 @@ bp = Blueprint('worship', __name__, url_prefix='/worship')
 @bp.route('/list/')
 @login_required
 def _list():
-    page = request.args.get('page', type=int, default=1)
-    worship_list = Worship.query.order_by(Worship.part.asc())
-    worship_list = worship_list.paginate(page, per_page=10)
+    #page = request.args.get('page', type=int, default=1)
+    worship_list = Worship.query.order_by(Worship.id.desc())
+    #worship_list = worship_list.paginate(page, per_page=10)
     return render_template('worship/worship_list.html', worship_list=worship_list)
 
 
@@ -46,3 +48,25 @@ def delete(worship_id):
     db.session.delete(worship)
     db.session.commit()
     return redirect(url_for('worship._list'))
+
+
+@bp.route('/changeid/',methods=['POST'])
+@login_required
+def changeid():
+    worship_list = Worship.query.order_by(Worship.id.desc())
+    data = request.get_data()
+    params = json.loads(data,encoding='utf-8')
+    if len(params) == 0:
+        return redirect(url_for('worship._list'))
+    if not 'rows' in params.keys():
+        return redirect(url_for('worship._list'))
+    else:
+        rows = params['rows']
+        for worship in worship_list:
+            worship.id = int(rows.pop(0))+10000
+        for worship in worship_list:
+            worship.id -= 10000
+        db.session.commit()
+    return redirect(url_for('worship._list'))
+
+

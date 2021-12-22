@@ -66,6 +66,13 @@
             </Attribute>
           </value>
         </entry>
+        <entry key="/w_reservation/views/worship_views.py">
+          <value>
+            <Attribute>
+              <option name="separator" value="," />
+            </Attribute>
+          </value>
+        </entry>
         <entry key="/w_reservation/views/worshiptype_views.py">
           <value>
             <Attribute>
