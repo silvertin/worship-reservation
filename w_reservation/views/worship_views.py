@@ -54,6 +54,7 @@ def delete(worship_id):
 @login_required
 def changeid():
     worship_list = Worship.query.order_by(Worship.id.desc())
+
     data = request.get_data()
     params = json.loads(data,encoding='utf-8')
     if len(params) == 0:
@@ -63,9 +64,16 @@ def changeid():
     else:
         rows = params['rows']
         for worship in worship_list:
+            seat = Seat.query.filter_by(worship_id=worship.id).all();
             worship.id = int(rows.pop(0))+10000
+            for s in seat:
+                s.worship_id = worship.id
+
         for worship in worship_list:
+            seat = Seat.query.filter_by(worship_id=worship.id).all();
             worship.id -= 10000
+            for s in seat:
+                s.worship_id = worship.id
         db.session.commit()
     return redirect(url_for('worship._list'))
 

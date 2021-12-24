@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="w_reservation.db.backup_211222" uuid="c5ebaf36-cf16-4f5c-bd50-43d593372582">
+    <data-source source="LOCAL" name="w_reservation.db" uuid="f391cfb4-6a50-458f-816a-33354aec766e">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/w_reservation.db.backup_211222</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/w_reservation.db</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
